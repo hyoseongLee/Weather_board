@@ -1,7 +1,7 @@
 import useWeatherStore from "../store/weatherStore"
 
 export default function FavoriteList() {
-    const { favorites, fetchWeather, addFavorites, removeFavorites, weather } = useWeatherStore()
+    const { favorites, fetchWeather, removeFavorites } = useWeatherStore()
 
     return (
         <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
