@@ -1,4 +1,4 @@
-import { useWeatherStore } from "../store/weatherStore"
+import useWeatherStore from "../store/weatherStore"
 
 export default function FavoriteList() {
     const { favorites, fetchWeather, addFavorites, removeFavorites, weather } = useWeatherStore()
@@ -8,15 +8,6 @@ export default function FavoriteList() {
             <div className="flex justify-between items-center mb-4">
                 <h3 className="text-white font-semibold">⭐ 즐겨찾기</h3>
                 {/* 현재 날씨가 있고 즐겨찾기에 없을 때만 추가 버튼 표시 */}
-                {weather && !favorites.includes(weather.city) && (
-                    <button
-                        type="button"
-                        onClick={() => addFavorites(weather.city)}
-                        className="text-sky-400 text-sm hover:text-sky-300"
-                    >
-                        + 현재 도시 추가
-                    </button>
-                )}
             </div>
 
             {/* 즐겨찾기 없을 때 */}
@@ -43,7 +34,7 @@ export default function FavoriteList() {
                         <button
                             type="button"
                             onClick={() => removeFavorites(city)}
-                            className="text-gray-400 hover:text-red-400 text-sm"
+                            className="text-gray-400 hover:text-red-400 text-sm cursor-pointer"
                         >
                             삭제
                         </button>

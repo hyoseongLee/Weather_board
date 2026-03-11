@@ -8,6 +8,30 @@ export default function LoginPage() {
     const [isSignUp, setIsSignUp] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const getErrorMessage = (error: unknown): string => {
+        if (error instanceof Error) {
+            const code = (error as { code?: string }).code ?? ""
+            switch (code) {
+                case "auth/weak-password":
+                    return "비밀번호는 6자 이상이어야 해요"
+                case "auth/email-already-in-use":
+                    return "이미 사용중인 이메일이에요"
+                case "auth/user-not-found":
+                    return "존재하지 않는 계정이에요"
+                case "auth/wrong-password":
+                    return "비밀번호가 틀렸어요"
+                case "auth/invalid-email":
+                    return "이메일 형식이 올바르지 않아요"
+                case "auth/invalid-credential":
+                    return "이메일 또는 비밀번호가 틀렸어요"
+                default:
+                    return "오류가 발생했어요"
+            }
+        }
+        return "오류가 발생했어요"
+    }
+
+
     const handleSubmit = async () => {
         try {
             if (isSignUp) {
@@ -18,8 +42,7 @@ export default function LoginPage() {
                 await signInWithEmailAndPassword(auth, email, password);
             }
         } catch (e) {
-            const message = e instanceof Error ? e.message : "오류가 발생했어요"
-            setError(message);
+            setError(getErrorMessage);
         }
     };
 
@@ -27,7 +50,7 @@ export default function LoginPage() {
         <div className="flex items-center justify-center min-h-screen bg-gray-900">
             <div className="bg-gray-800 p-8 rounded-2xl w-96">
                 <h1 className="text-3xl font-bold text-white mb-8 text-center">
-                    {isSignUp ? "회원가입" : "로그인"}
+                    WEATHERLY
                 </h1>
 
                 {error && <p className="text-red-400 mb-4 text-sm">{error}</p>}

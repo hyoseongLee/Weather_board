@@ -3,12 +3,35 @@ import type { WeatherData, HourlyData, ForecastItem } from "../types/weather";
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
+const GEO_URL = "https://api.openweathermap.org/geo/1.0" 
+
+
+const getCoordinates = async (city: string) => {
+    const response = await axios.get(`${GEO_URL}/direct`, {
+        params: {
+            q: `${city},KR`,
+            limit: 1,
+            appid: API_KEY,
+        }
+    })
+    
+    if (response.data.length === 0) {
+        throw new Error("도시를 찾을 수 없어요")
+    }
+    
+    return {
+        lat: response.data[0].lat,
+        lon: response.data[0].lon,
+    }
+}
 
 // 현재 날씨 가져오기
 export const fetchCurrentWeather =async (city:string): Promise<WeatherData> =>{
+    const { lat, lon } = await getCoordinates(city)
     const response = await axios.get(`${BASE_URL}/weather`, {
         params: {
-            q : city,
+            lat,
+            lon,
             appid : API_KEY,
             units : "metric", // 섭씨온도
             lang : "kr",
@@ -17,7 +40,7 @@ export const fetchCurrentWeather =async (city:string): Promise<WeatherData> =>{
 
     const data = response.data;
     return {
-        city: data.name,
+        city: city,
         country: data.sys.country,
         temp: Math.round(data.main.temp),
         feelsLike: Math.round(data.main.feels_like),
@@ -31,11 +54,14 @@ export const fetchCurrentWeather =async (city:string): Promise<WeatherData> =>{
 };
 
 
-// 실시간 날씨 가져오기 (무료)
+// 실시간 날씨 가져오기
 export const fetchHourlyData = async (city:string) :Promise<HourlyData[]> => {
+    const { lat, lon } = await getCoordinates(city)
+
     const response = await axios.get(`${BASE_URL}/forecast`,{
          params: {
-            q: city,
+            lat,
+            lon,
             appid: API_KEY,
             units: "metric",
             lang: "kr",

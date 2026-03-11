@@ -41,7 +41,10 @@ export interface WeatherStore {
     favorites : string[]
     isLoading : boolean;
     error : string | null;
-    fetchWeather : (city: string) => Promise<void>; // 날씨 가져오기
-    addFavorites : (city: string) => void; // 즐겨찾기 추가
-    removeFavorites : (city: string) => void // 즐겨찾기 삭제
+    uid: string | null                                              
+    setUid: (uid: string | null) => void                       
+    fetchWeather: (city: string) => Promise<void>
+    loadFavorites: (uid: string) => Promise<void>
+    addFavorites: (city: string) => Promise<void>              
+    removeFavorites: (city: string) => Promise<void> 
 }

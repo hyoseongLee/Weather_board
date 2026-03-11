@@ -1,8 +1,7 @@
-import { useWeatherStore } from "../store/weatherStore"
+import useWeatherStore from "../store/weatherStore"
 
 export default function WeatherCard() {
     const { weather, hourly, isLoading, error } = useWeatherStore()
-
     // 유닉스 타임스탬프 → 시간 변환
     const formatTime = (unix: number) => {
         return new Date(unix * 1000).toLocaleTimeString("ko-KR", {
@@ -40,7 +39,8 @@ export default function WeatherCard() {
                 <img
                     src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
                     alt={weather.description}
-                    className="w-16 h-16"
+                    className="w-16 h-16 rounded-full"
+                    onError={(e) => console.log("이미지 로드 실패:", e)}
                 />
             </div>
 
@@ -54,15 +54,15 @@ export default function WeatherCard() {
             {/* 날씨 정보 */}
             <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="bg-gray-700 rounded-xl p-4">
-                    <p className="text-gray-400 text-sm">습도</p>
+                    <p className="text-gray-400 text-sm">💧습도</p>
                     <p className="text-white font-semibold">{weather.humidity}%</p>
                 </div>
                 <div className="bg-gray-700 rounded-xl p-4">
-                    <p className="text-gray-400 text-sm">풍속</p>
+                    <p className="text-gray-400 text-sm">💨풍속</p>
                     <p className="text-white font-semibold">{weather.windSpeed}m/s</p>
                 </div>
                 <div className="bg-gray-700 rounded-xl p-4">
-                    <p className="text-gray-400 text-sm">일출/일몰</p>
+                    <p className="text-gray-400 text-sm">🌅일출/일몰</p>
                     <p className="text-white font-semibold text-xs">
                         {formatTime(weather.sunrise)} / {formatTime(weather.sunset)}
                     </p>

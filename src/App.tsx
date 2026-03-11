@@ -1,31 +1,30 @@
-import { useEffect, useState } from "react"
-import LoginPage from "./pages/LoginPage"
-import { onAuthStateChanged, type User } from "firebase/auth";
-import { auth } from "./firebase";  
-import MainPage from "./pages/MainPage";
-
+import type { User } from 'firebase/auth'
+import { onAuthStateChanged } from 'firebase/auth'
+import { useEffect, useState } from 'react'
+import { auth } from './firebase'
+import Router from './router'
+import useWeatherStore from './store/weatherStore'
 
 export default function App() {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+    const [user, setUser] = useState<User | null>(null)
+    const [loading, setLoading] = useState(true)
+    const { setUid, loadFavorites } = useWeatherStore()
 
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setUser(user)
+            setLoading(false)
+            if (user) {
+                setUid(user.uid)
+                loadFavorites(user.uid)
+            } else {
+                setUid(null)
+            }
+        })
+        return unsubscribe
+    }, [setUid, loadFavorites])
 
-  useEffect(() => {
-    const unsuubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser)
-      setIsLoading(false)
-    })
-    return () => unsuubscribe()
-  }, [])
+    if (loading) return <div className="text-white p-8">로딩중...</div>
 
-
-  // 로딩 중
-  if (isLoading) return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white text-xl">
-      🔄 로딩 중...
-    </div>
-  )
-
-  return user ? <MainPage /> : <LoginPage />
-
+    return <Router user={user} />
 }
