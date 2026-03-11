@@ -2,7 +2,7 @@ import { signOut } from "firebase/auth"
 import SearchBar from "../components/SearchBar"
 import WeatherCard from "../components/WeatherCard"
 import FavoriteList from "../components/FavoriteList"
-import { auth } from "../fireBase"
+import { auth } from "../firebase"
 
 
 
