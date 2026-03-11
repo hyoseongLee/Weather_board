@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import LoginPage from "./pages/LoginPage"
 import { onAuthStateChanged, type User } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth } from "./firebase";  
 import MainPage from "./pages/MainPage";
 
 
