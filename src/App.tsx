@@ -50,7 +50,7 @@ export default function App() {
 
     return (
         <>
-            <LoginModal isOpen={isLoginModal} />
+            {isLoginModal && <LoginModal isOpen={isLoginModal} />}
             <Toast message={toast} onClose={() => setToast(null)} />
             <Router user={user} />
         </>

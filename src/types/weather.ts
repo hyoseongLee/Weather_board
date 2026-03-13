@@ -38,11 +38,11 @@ export interface ForecastItem {
 export interface WeatherStore {
     weather : WeatherData | null ;  // 현재 날씨
     hourly : HourlyData[]; // 시간별 예보
-    favorites : string[]
-    isLoading : boolean;
-    error : string | null;
-    uid: string | null                                              
-    setUid: (uid: string | null) => void                       
+    favorites : string[] 
+    isLoading : boolean; 
+    error : string | null; 
+    uid: string | null                            
+    setUid: (uid: string | null) => void                        
     fetchWeather: (city: string) => Promise<void>
     loadFavorites: (uid: string) => Promise<void>
     addFavorites: (city: string) => Promise<void>              

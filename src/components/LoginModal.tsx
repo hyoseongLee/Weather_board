@@ -12,7 +12,7 @@ export default function LoginModal({ isOpen }: LoginModalProps) {
     const [password, setPassword] = useState("")
     const [isSignUp, setIsSignUp] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const { setLoginModalOpen } = useWeatherStore() 
+    const { setLoginModalOpen } = useWeatherStore()
 
     const getErrorMessage = (error: unknown): string => {
         const code = (error as { code?: string })?.code ?? ""
@@ -34,6 +34,9 @@ export default function LoginModal({ isOpen }: LoginModalProps) {
             } else {
                 await signInWithEmailAndPassword(auth, email, password)
             }
+            setEmail("")
+            setPassword("")
+            setError(null)
             setLoginModalOpen(false)  // 로그인 성공시 모달 닫기
         } catch (e) {
             setError(getErrorMessage(e))
@@ -46,7 +49,7 @@ export default function LoginModal({ isOpen }: LoginModalProps) {
         <>
             {/* 모달 카드 */}
             <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="relative bg-sky-100 backdrop-blur-md rounded-2xl p-8 w-96 shadow-xl animate-slideUp">
+                <div className="relative bg-sky-100 backdrop-blur-md rounded-2xl p-8 w-96 shadow-xl animate-slideUp">
 
                     {/* 닫기 버튼 */}
                     <button
@@ -88,7 +91,7 @@ export default function LoginModal({ isOpen }: LoginModalProps) {
                     <button
                         type="button"
                         onClick={handleSubmit}
-                        onKeyDown={(e)=> {if (e.key === "Enter") handleSubmit()}}
+                        onKeyDown={(e) => { if (e.key === "Enter") handleSubmit() }}
                         className="w-full bg-sky-500 text-white rounded-xl p-3 font-semibold hover:bg-sky-400 cursor-pointer"
                     >
                         {isSignUp ? "가입하기" : "로그인"}
