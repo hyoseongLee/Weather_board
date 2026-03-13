@@ -1,7 +1,6 @@
 import type { User } from 'firebase/auth'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import FavoritePage from '../pages/FavoritePage'
-import LoginPage from '../pages/LoginPage'
 import MainPage from '../pages/MainPage'
 
 interface RouterProps {
@@ -11,17 +10,12 @@ interface RouterProps {
 export default function Router({ user }: RouterProps) {
     return (
         <Routes>
-            <Route
-                path="/login"
-                element={!user ? <LoginPage /> : <Navigate to="/" />}
-            />
-            <Route
-                path="/"
-                element={user ? <MainPage /> : <Navigate to="/login" />}
-            />
+            {/* 비로그인도 메인 접근 가능 */}
+            <Route path="/" element={<MainPage />} />
+            {/* 즐겨찾기는 로그인시에만 */}
             <Route
                 path="/favorites"
-                element={user ? <FavoritePage /> : <Navigate to="/login" />}
+                element={user ? <FavoritePage /> : <MainPage />}
             />
         </Routes>
     )

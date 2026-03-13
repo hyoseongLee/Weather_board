@@ -9,8 +9,11 @@ const useWeatherStore = create<WeatherStore>((set, get) => ({
     hourly: [],
     favorites: [],
     isLoading: false,
+    isLoginModal: false,
+    setLoginModalOpen: (open) => set({isLoginModal:open}),
     error: null,
     uid: null,
+    resetWeather: () => set({ weather: null, hourly: [], error: null }),
 
     setUid: (uid) => set({ uid }),
 

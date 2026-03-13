@@ -47,4 +47,7 @@ export interface WeatherStore {
     loadFavorites: (uid: string) => Promise<void>
     addFavorites: (city: string) => Promise<void>              
     removeFavorites: (city: string) => Promise<void> 
+    isLoginModal: boolean
+    setLoginModalOpen: (open:boolean) => void
+    resetWeather: () => void
 }
