@@ -1,12 +1,19 @@
-# 🌤 날씨 대시보드 개발 로드맵
+# 🌤 SkyVue - 날씨 대시보드
 
-## 기술 스택
-- React + TypeScript
-- Zustand (상태관리)
-- TailwindCSS (UI)
-- OpenWeather API (날씨 데이터)
-- Firebase Auth (로그인)
-- Vite (빌드 도구)
+> 도시별 날씨를 검색하고, 즐겨찾기로 관리하는 개인 날씨 대시보드
+
+## 🛠 기술 스택
+
+| 분류 | 기술 |
+|------|------|
+| 프레임워크 | React + TypeScript |
+| 상태관리 | Zustand |
+| 스타일 | TailwindCSS |
+| 날씨 데이터 | OpenWeather API |
+| 인증 | Firebase Auth |
+| DB | Firebase Firestore |
+| 배포 | Vercel |
+| 빌드 | Vite |
 
 ---
 
@@ -16,110 +23,77 @@ src/
 ├── components/
 │   ├── SearchBar.tsx       # 도시 검색바
 │   ├── WeatherCard.tsx     # 메인 날씨 카드
-│   └── FavoriteList.tsx    # 즐겨찾기 목록
+│   ├── FavoriteList.tsx    # 즐겨찾기 목록
+│   ├── SideBar.tsx         # 사이드바
+│   ├── WeatherParticles.tsx # 날씨별 파티클 배경
+│   ├── LoginModal.tsx      # 로그인/회원가입 모달
+│   └── Toast.tsx           # 토스트 알림
 ├── store/
-│   └── weatherStore.ts     # Zustand 상태관리
+│   └── weatherStore.ts     # Zustand 전역 상태
 ├── types/
 │   └── weather.ts          # TypeScript 타입 정의
 ├── api/
 │   └── weatherApi.ts       # OpenWeather API 호출
 ├── pages/
-│   ├── HomePage.tsx        # 메인 페이지
-│   └── LoginPage.tsx       # 로그인 페이지
+│   ├── MainPage.tsx        # 메인 페이지
+│   └── FavoritePage.tsx    # 즐겨찾기 페이지
+├── router/
+│   └── index.tsx           # 라우팅
 ├── firebase.ts             # Firebase 초기화
-├── App.tsx                 # 라우팅
-└── index.css               # TailwindCSS
+├── App.tsx                 # 앱 진입점
+└── index.css               # 전역 스타일
 ```
 
 ---
 
-## ✅ 진행 순서
+## ✨ 주요 기능
 
-### STEP 1. 프로젝트 세팅 ✅ 완료
-- [x] Vite + React + TypeScript 프로젝트 생성
-- [x] TailwindCSS 설치 및 설정
-- [x] Zustand, Axios, Firebase 설치
-- [x] OpenWeather API 키 발급
-- [x] Firebase 프로젝트 생성
-- [x] `.env` 파일 작성
-- [x] `firebase.ts` 파일 작성
-- [x] 폴더 구조 생성
+- 🔍 한국어 도시명으로 날씨 검색
+- 🌤 현재 날씨 및 시간별 예보 표시
+- ⭐ 즐겨찾기 도시 저장 및 관리 (로그인 필요)
+- 🎨 날씨 상태에 따라 배경·파티클 자동 변경
+- 🔐 Firebase 이메일 로그인 / 회원가입
+- 📱 비로그인 상태에서도 날씨 검색 가능
 
 ---
 
-### STEP 2. 타입 정의
-- [ ] `src/types/weather.ts`
-  - WeatherData 인터페이스
-  - HourlyData 인터페이스
-  - WeatherStore 인터페이스
+## 💡 기술적 도전
+
+### 로그인 직후 즐겨찾기 자동 동기화
+`onAuthStateChanged`를 App.tsx 최상단에서 구독해,
+로그인이 감지되는 즉시 Firestore에서 즐겨찾기를
+자동으로 불러오는 흐름을 설계했습니다.
+
+### 로그인 페이지 → 모달로 설계 변경
+초기에는 비로그인 사용자를 로그인 페이지로
+강제 리다이렉트하는 구조로 설계했습니다.
+개발 중 사용자 이탈 가능성을 인식하고,
+즐겨찾기 접근 시점에만 모달을 노출하는 방식으로
+전면 재설계했습니다.
+
+### Zustand 단일 스토어로 전역 상태 통합
+날씨 데이터, uid, 즐겨찾기, 모달 제어를
+단일 스토어로 통합 관리해 props drilling 없이
+어떤 컴포넌트에서든 상태를 즉시 참조할 수 있도록
+설계했습니다.
 
 ---
 
-### STEP 3. API 연동
-- [ ] `src/api/weatherApi.ts`
-  - 현재 날씨 가져오기 (fetchCurrentWeather)
-  - 시간별 예보 가져오기 (fetchHourlyWeather)
+## 🚀 시작하기
+```bash
+# 설치
+npm install
+
+# 개발 서버 실행
+npm run dev
+
+# 빌드
+npm run build
+```
 
 ---
 
-### STEP 4. 상태관리 (Zustand)
-- [ ] `src/store/weatherStore.ts`
-  - weather 상태
-  - hourly 상태
-  - favorites 상태
-  - isLoading, error 상태
-  - fetchWeather 액션
-  - addFavorite / removeFavorite 액션
-
----
-
-### STEP 5. 로그인 페이지
-- [ ] `src/pages/LoginPage.tsx`
-  - 이메일/비밀번호 입력
-  - Firebase 로그인 연동
-  - 회원가입 연동
-
----
-
-### STEP 6. 컴포넌트 작성
-- [ ] `src/components/SearchBar.tsx`
-  - 도시 검색 입력
-  - 검색 버튼
-- [ ] `src/components/WeatherCard.tsx`
-  - 온도, 날씨 상태 표시
-  - 습도, 풍속, 체감온도
-  - 일출/일몰 시간
-  - 시간별 예보
-- [ ] `src/components/FavoriteList.tsx`
-  - 즐겨찾기 도시 목록
-  - 추가/삭제 기능
-
----
-
-### STEP 7. 메인 페이지
-- [ ] `src/pages/HomePage.tsx`
-  - 사이드바 + 메인 레이아웃
-  - 컴포넌트 조합
-
----
-
-### STEP 8. 라우팅
-- [ ] `src/App.tsx`
-  - 로그인 여부에 따라 페이지 분기
-  - 로그인 안 했으면 → LoginPage
-  - 로그인 했으면 → HomePage
-
----
-
-### STEP 9. 배포
-- [ ] Vercel 배포
-  - GitHub에 푸시
-  - Vercel 연동
-  - 환경변수 설정
-
----
-
-## 🔑 환경변수 목록 (.env)
+## 🔑 환경변수 설정 (.env)
 ```bash
 VITE_FIREBASE_API_KEY=
 VITE_FIREBASE_AUTH_DOMAIN=
@@ -132,24 +106,11 @@ VITE_OPENWEATHER_API_KEY=
 
 ---
 
-## 📦 설치한 패키지
+## 📦 설치 패키지
 ```bash
 # 프로덕션
-npm install zustand axios firebase
+npm install zustand firebase react-router-dom
 
 # 개발용
 npm install -D tailwindcss @tailwindcss/vite
 ```
-
----
-
-## 🗓 1주일 플랜
-| 일차 | 목표 |
-|------|------|
-| 1일차 | STEP 1~3 (세팅 + 타입 + API) |
-| 2일차 | STEP 4 (Zustand 상태관리) |
-| 3일차 | STEP 5 (로그인 페이지) |
-| 4일차 | STEP 6 (컴포넌트) |
-| 5일차 | STEP 7~8 (메인 페이지 + 라우팅) |
-| 6일차 | UI 다듬기 + 버그 수정 |
-| 7일차 | STEP 9 (배포) |
